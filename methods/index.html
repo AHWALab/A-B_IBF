@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>IBF for Antigua and Barbuda: Method and Design Note</title>
+<style>
+  :root{--ink:#20323F;--muted:#5C6F7C;--line:#D8E0E6;--bg:#EEF2F5}
+  *{box-sizing:border-box} body{margin:0;font:15px/1.6 "Segoe UI",system-ui,-apple-system,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+  header{background:#123049;color:#fff;padding:22px 20px}
+  header h1{margin:0;font-size:20px;font-weight:650}
+  header a{color:#BCD3E6;font-size:13px;text-decoration:none}
+  header a:hover{text-decoration:underline}
+  main{max-width:860px;margin:0 auto;padding:26px 18px 46px}
+  .paper{background:#fff;border:1px solid var(--line);border-radius:10px;padding:26px 32px}
+  h2{font-size:17px;margin:26px 0 8px;color:#123049}
+  h2:first-child{margin-top:0}
+  p,li{font-size:14.5px;color:#334754}
+  table{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
+  th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+  th{background:#F3F6F8;font-weight:650}
+  .ref{font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);margin-top:24px;padding-top:12px}
+  ol li{margin-bottom:6px}
+</style>
+</head>
+<body>
+<header>
+  <a href="../">Back to the viewer</a>
+  <h1>IBF for Antigua and Barbuda: Method and Design Note</h1>
+</header>
+<main><div class="paper">
+
+<h2>1. Purpose</h2>
+<p>This note documents the impact-based forecasting (IBF) product delivered for Antigua and Barbuda with the
+Tropical Storm Jerry hindcast of 9 to 11 October 2025. The receptor routine (tito_utils.ibf_utils) runs inside the
+TITO orchestrator immediately after the flood inundation mapping step of each parish site and converts the flood
+likelihood products of the site into warning levels for every building, road segment and parish. The viewer beside
+this note shows those levels for each of the 48 hourly forecast cycles.</p>
+
+<h2>2. Inputs</h2>
+<p><b>Likelihood.</b> For each parish (Barbuda and the six parishes of Antigua) a library of 200 pre-simulated flood
+maps from the hydrodynamic island models, windowed on the parish and indexed on the RainyDay storm total over the
+parish. In each cycle every one of the 50 ensemble members (10 STREAM-Sat analysis members by 5 StormLab rainfall
+realizations, 24 h of forecast rain) is matched to the library by its rainfall total over the parish, and the members
+vote pixel by pixel. The products used here are the probabilities of exceeding 0.10, 0.30, 0.70 and 1.00 m, on the
+30 m grid of the TITO domain.</p>
+<p><b>Receptors.</b> Overture Maps buildings (71,136 in the seven units) and roads (9,559 segments, 1,237 km, classes
+motorway to unclassified) shipped in the TITO repository, classified with the GHS BUILT-C functional layer
+(residential, non-residential, other), joined to the ADM1 parishes with the Statistics Division population estimates,
+and given a dasymetric population per building by area weight and functional class. Critical facilities are the
+Overture subtypes medical, education, civic and emergency where present (78 buildings carry the flag).</p>
+
+<h2>3. The adopted standard</h2>
+<p>The product follows Speight et al. (2018), the Glasgow operational surface water IBF pilot, whose framework is the
+Scottish Flood Forecasting Service and UK Flood Guidance Statement standard. The warning level of every feature is
+the matrix combination of likelihood and potential impact severity, rendered green, yellow, amber and red.</p>
+<table>
+  <tr><th>Likelihood band (FGS)</th><th>Probability of occurrence</th></tr>
+  <tr><td>Very Low</td><td>5 to 20 percent</td></tr>
+  <tr><td>Low</td><td>20 to 40 percent</td></tr>
+  <tr><td>Medium</td><td>40 to 60 percent</td></tr>
+  <tr><td>High</td><td>above 60 percent</td></tr>
+</table>
+<p>Probabilities below 5 percent fall under the reporting threshold. Each severity level is tied to a depth threshold
+of the library products: Minor to 0.10 m, Significant to 0.30 m, Severe to 0.70 m, the same values for every
+country of the project since version 1.3.1. The probability of each threshold is sampled on every receptor as the
+maximum over its footprint, gives that severity's likelihood band, and the feature colour is the worst matrix cell
+across the three severities. This keeps likelihood and severity as two axes instead of collapsing them through one
+probability cutoff, so a low probability of severe flooding still yields an amber cell. No velocity field exists for
+the island libraries, so the flood hazard rating upgrade of the Barbados scenario product is not applied.</p>
+<p>For continuity with the IBF team's IBFv1.0 fields, the routine also writes the hazard flag (highest threshold whose
+probability reaches the cutoff of 50 percent, the user default; the reference runs used 30 percent), the residential
+and hazard class breakdowns per parish, the impact warning flags on four exposure metrics (population, building
+count, building area, road length: severe at 10 affected or 5 percent, otherwise low, moderate and high bins at 100
+or 10 percent of the parish stock) and the parish impact flag, which the matrix combines with the parish likelihood
+into the parish overall risk shown in the viewer.</p>
+
+<h2>4. Assembly for the viewer</h2>
+<p>Each parish library is windowed on the bounding box of the parish, so the receptor windows of neighbouring parishes
+overlap and a building near a boundary is classified by two sites with two different rainfall totals. The viewer
+keeps, for every receptor, the classification of the parish that contains it, so the country totals count each
+building and road once. Parish sites that stay quiet in a cycle (no run over the trigger of 1.0 m3/s per km2 over
+the parish window) produce no product and are shown as quiet. The 12:00 UTC cycle of 9 October did not complete
+and is absent.</p>
+
+<h2>5. What the hindcast shows</h2>
+<p>The warning builds in three steps. The cycles of 9 October before 12:00 UTC carry a few hundred yellow buildings
+at most. From 13:00 UTC on 9 October the count rises to about 2,200 yellow and 80 amber buildings and holds through
+the evening. The cycles issued from 00:00 UTC on 10 October, five hours before the observed rain burst at V.C. Bird
+International Airport (167 mm in four hours from 04:40 UTC), reach 2,700 to 2,900 yellow, 200 to 250 amber and 15 to
+20 red buildings, 3,700 people in buildings at yellow or worse, and five of the seven parishes at HIGH overall risk.
+The levels hold through the burst and recede from 18:00 UTC on 10 October. The reported impacts of the event
+(Piggotts, the Airport Road intersection, Big Creek, Bathlodge, Friars Hill Road, Folleys, the Meteorological Office
+at the airport, and rising water in St. John's, Bolans, All Saints and Clare Hall) are drawn on the map for
+comparison.</p>
+
+<h2>6. Open items for the next iteration</h2>
+<ol>
+  <li>Parish roll up thresholds: the IBFv1.0 impact flags reach severe with 10 affected buildings, which sends most
+      parishes to HIGH once any cluster of red buildings appears. The thresholds are configuration values and should
+      be set jointly with the national partners.</li>
+  <li>Library windows: clipping the parish libraries to the parish polygons, or masking the products, would remove the
+      double classification near boundaries and the need for the own parish rule in the viewer.</li>
+  <li>Multi site output folders: in the orchestrated run every parish wrote its likelihood products to the same folder,
+      so only the last site's rasters survived in the archive. The receptor products were correct because each ran
+      right after its own site; the mosaics of the training package were rebuilt from the archived members. A site
+      subfolder in the FIM output path fixes this for the operational chain.</li>
+  <li>Coastal and drainage mechanisms: the libraries are pluvial; storm surge, tidal locking and drainage failure are
+      not represented.</li>
+  <li>Population: parish estimates disaggregated to buildings are an indicator; an enumeration district layer, as used
+      for Barbados, would sharpen the exposure figures.</li>
+</ol>
+
+<div class="ref">References: Speight, L., et al. (2018). Developing surface water flood forecasting capabilities in
+Scotland: an operational pilot for the 2014 Commonwealth Games in Glasgow. Journal of Flood Risk Management 11,
+S884-S901. SEPA and Met Office (2015). Your guide to using the Flood Guidance Statement, third publication. WMO No.
+1150, Guidelines on Multi-hazard Impact-based Forecast and Warning Services. NHC Tropical Cyclone Report AL102025,
+Tropical Storm Jerry. Antigua and Barbuda Meteorological Service rainfall as reported by 268weather (19 October 2025).</div>
+</div></main>
+</body>
+</html>
