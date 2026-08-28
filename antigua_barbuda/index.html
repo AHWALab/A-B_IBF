@@ -745,7 +745,7 @@ details .bd{font-size:12px;color:#43505c;margin-top:6px}
   <select id="cycSel"></select>
   <button class="step" id="next">&gt;</button>
   <button class="tog" id="play">Play</button>
-  <select id="baseSel"><option value="carto">Light basemap</option><option value="osm">OpenStreetMap</option><option value="sat">Satellite</option></select>
+  <select id="baseSel"><option value="carto">Light basemap</option><option value="voyager">Voyager basemap</option><option value="osm">OpenStreetMap</option><option value="sat">Satellite</option></select>
   <div class="tlwrap"><svg id="tl"></svg><div class="tlcap">Population in buildings at yellow or worse, per cycle; bar colour is the worst parish level of the cycle. Times are UTC. Click a bar to open the cycle, arrow keys step.</div></div>
 </div>
 <div id="wrap">
@@ -811,11 +811,14 @@ function likName(p){const i=likIdx(p);return i<0?'below reporting':LL[i];}
 const map = L.map('map', {preferCanvas:true, renderer:L.canvas({padding:0.4}), zoomControl:false, attributionControl:false});
 L.control.zoom({zoomInText:'+', zoomOutText:'-'}).addTo(map);
 L.control.attribution({prefix:false}).addTo(map);
-const baseLight = L.tileLayer('https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{maxZoom:20, attribution:'OpenStreetMap, CARTO'});
+// CARTO Basemaps API key of the University of Iowa (raster tiles need it since 2026; the key is public by design and can be restricted to the site domain in the CARTO account)
+const CARTO_KEY = 'cb1_2hul_1_d1beea1581cc2f8c94ba52d4';
+const baseLight = L.tileLayer('https://basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}{r}.png?key='+CARTO_KEY,{maxZoom:20, attribution:'OpenStreetMap, CARTO'});
+const baseVoyager = L.tileLayer('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key='+CARTO_KEY,{maxZoom:20, attribution:'OpenStreetMap, CARTO'});
 const baseOSM = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19, attribution:'OpenStreetMap'});
 const baseSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19, attribution:'Esri, Maxar'});
 baseLight.addTo(map);
-document.getElementById('baseSel').onchange=e=>{[baseLight,baseOSM,baseSat].forEach(b=>map.removeLayer(b));({carto:baseLight,osm:baseOSM,sat:baseSat})[e.target.value].addTo(map);};
+document.getElementById('baseSel').onchange=e=>{[baseLight,baseVoyager,baseOSM,baseSat].forEach(b=>map.removeLayer(b));({carto:baseLight,voyager:baseVoyager,osm:baseOSM,sat:baseSat})[e.target.value].addTo(map);};
 L.control.scale({imperial:false}).addTo(map);
 const flip = cs => cs.map(c => [c[1], c[0]]);
 

@@ -32,6 +32,16 @@ STEP 8. The viewer data are assembled by `ibf_10_data.py` of the training packag
 windows, per cycle classification of the receptors that ever reach yellow, parish summaries,
 FIM likelihood overlays) and the page by `ibf_40_build.py` from `ibf_template.html`.
 
+## Basemap key
+
+The CARTO raster basemaps (Light and Voyager) require an API key since 2026; without it the
+tiles carry an "API KEY REQUIRED" watermark. The page carries the University of Iowa key in
+the `CARTO_KEY` constant near the top of its script block. To change the key, edit that one
+line in the built page, or in the template of the training package pipeline and rebuild.
+The key is visible in the page source by design (client side tile requests); it can be
+restricted to the site domain in the CARTO account settings. The OpenStreetMap and Esri
+satellite basemaps do not use it.
+
 ## Enabling GitHub Pages (first time only)
 
 1. Push this repository to GitHub (main branch).
