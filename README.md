@@ -30,7 +30,10 @@ The per cycle receptor products (`ibf_receptors.<cycle>.gpkg`, `ibf_admin_summar
 STEP 8. The viewer data are assembled by `ibf_10_data.py` of the training package pipeline
 (`Country_trainings/A&B/web_interfaces/pipeline`: own parish rule for the overlapping site
 windows, per cycle classification of the receptors that ever reach yellow, parish summaries,
-FIM likelihood overlays) and the page by `ibf_40_build.py` from `ibf_template.html`.
+FIM likelihood overlays), enriched with the OpenStreetMap extract of 6 April 2026 by
+`ibf_08_osm.py` and `ibf_12_osm_merge.py` (named facilities and bridges or fords classified per
+cycle from the likelihood mosaics, road and building names, land use context), and the page by
+`ibf_40_build.py` from `ibf_template.html`.
 
 ## Basemap key
 

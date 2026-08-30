@@ -94,7 +94,41 @@ The levels hold through the burst and recede from 18:00 UTC on 10 October. The r
 at the airport, and rising water in St. John's, Bolans, All Saints and Clare Hall) are drawn on the map for
 comparison.</p>
 
-<h2>6. Open items for the next iteration</h2>
+<h2>6. Named facilities, crossings and roads from OpenStreetMap</h2>
+<p>The training package holds an OpenStreetMap extract of Antigua and Barbuda dated 6 April 2026
+(40,048 building footprints with their tags, 9,113 road lines, land use polygons). It is less
+complete than the Overture receptor base as a building inventory (71,136 footprints), so it does
+not replace the receptors; it adds what the receptor base lacks: names and functions. Three
+things were derived from it for the viewer.</p>
+<p><b>Facilities.</b> Tagged buildings were grouped into nine classes: health (hospitals, clinics,
+dentists, pharmacies), education (schools, colleges, universities, kindergartens), emergency
+services (police, fire), shelters and community centres, places of worship (the usual hurricane
+shelters of the islands), government offices, utilities and transport (power, storage tanks,
+airport terminals, the APUA headquarters), fuel stations, banks and supermarkets, and hotels or
+guest houses: 275 facilities in all, 188 of them named. Each facility is classified per cycle with
+the rules of the receptor routine, sampling the parish likelihood mosaics over its footprint; on
+the building receptors of the peak cycle this sampling reproduces the routine's warning class for
+99.5 percent of the 3,174 receptors compared, the rest being boundary cells where the routine
+read a neighbouring parish window.</p>
+<p><b>Crossings.</b> Road lines tagged as bridges (23) or fords (2) form a crossings receptor
+class, classified the same way over a 10 m buffer. They are the receptors that respond first and
+strongest to the flash flood signal: 16 of the 25 reach yellow or worse in the cycles issued from
+00:00 UTC on 10 October, with the Sir Sidney Walling Highway bridge and the Valley Road bridge at
+amber and one secondary road bridge at red, hours before the observed rain burst.</p>
+<p><b>Names.</b> Road receptors that ever reach yellow were matched to the named OpenStreetMap
+lines (largest overlap within 15 m): 506 of the 879 segments carry a name, which the viewer uses
+in the popups and in a per cycle list of named roads at amber or worse (Fig Tree Drive, Old Parham
+Road, Collins Road, Golf Club Road, Freemans Road and Burma Road among the roads that reach red).
+Building receptors that fall inside a tagged OpenStreetMap footprint show its name or function in
+their popup. The OpenStreetMap land use polygons (residential, commercial, industrial, military)
+are available as a context layer.</p>
+<p>Facilities stay mostly at yellow in this event: 14 reach yellow at some point (a clinic, two
+places of worship, a police station, a supermarket, schools and university buildings in Saint
+George, two guest houses, two storage tanks), none reach amber. Bridges, fords and the named
+roads carry the amber and red levels, which matches the reported impacts (flooded roads and
+intersections).</p>
+
+<h2>7. Open items for the next iteration</h2>
 <ol>
   <li>Parish roll up thresholds: the IBFv1.0 impact flags reach severe with 10 affected buildings, which sends most
       parishes to HIGH once any cluster of red buildings appears. The thresholds are configuration values and should
@@ -109,13 +143,16 @@ comparison.</p>
       not represented.</li>
   <li>Population: parish estimates disaggregated to buildings are an indicator; an enumeration district layer, as used
       for Barbados, would sharpen the exposure figures.</li>
+  <li>Facility inventory: 87 of the 275 OpenStreetMap facilities are unnamed and many schools, clinics and
+      shelters are missing from the map data; a national list of critical facilities and official shelters,
+      with coordinates, would complete this receptor class.</li>
 </ol>
 
 <div class="ref">References: Speight, L., et al. (2018). Developing surface water flood forecasting capabilities in
 Scotland: an operational pilot for the 2014 Commonwealth Games in Glasgow. Journal of Flood Risk Management 11,
 S884-S901. SEPA and Met Office (2015). Your guide to using the Flood Guidance Statement, third publication. WMO No.
 1150, Guidelines on Multi-hazard Impact-based Forecast and Warning Services. NHC Tropical Cyclone Report AL102025,
-Tropical Storm Jerry. Antigua and Barbuda Meteorological Service rainfall as reported by 268weather (19 October 2025).</div>
+Tropical Storm Jerry. Antigua and Barbuda Meteorological Service rainfall as reported by 268weather (19 October 2025). OpenStreetMap contributors, extract of 6 April 2026, ODbL.</div>
 </div></main>
 </body>
 </html>
